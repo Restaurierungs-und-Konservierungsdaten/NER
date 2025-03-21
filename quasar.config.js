@@ -58,6 +58,9 @@ export default defineConfig((/* ctx */) => {
       // distDir
 
       // extendViteConf (viteConf) {},
+      extendViteConf (viteConf) {
+        viteConf.base = './'
+      },
       // viteVuePluginOptions: {},
       
       vitePlugins: [
