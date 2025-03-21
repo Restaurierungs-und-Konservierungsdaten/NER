@@ -57,6 +57,7 @@
   const ocrFile = ref(null);
 
   pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+  const ocrLanguage = 'deu';
 
   const handleFileChange = async (newFile) => {
     console.log("File changed:", newFile);
@@ -198,7 +199,7 @@ const handleOcrFileChange = async (newFile) => {
           }
           
           // Run OCR on the image
-          const { data: { text } } = await Tesseract.recognize(imageData, 'eng', {
+          const { data: { text } } = await Tesseract.recognize(imageData, ocrLanguage, {
             logger: m => console.log(`Page ${pageNum}: ${m.status} (${Math.floor(m.progress * 100)}%)`)
           });
           
@@ -215,7 +216,7 @@ const handleOcrFileChange = async (newFile) => {
       // Handle image files (existing code)
       reader.onload = async (e) => {
         const imageData = e.target.result;
-        const { data: { text } } = await Tesseract.recognize(imageData, 'eng', {
+        const { data: { text } } = await Tesseract.recognize(imageData, ocrLanguage, {
           logger: m => console.log(m)
         });
         inputText.value = text;
