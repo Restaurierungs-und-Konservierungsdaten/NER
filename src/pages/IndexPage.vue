@@ -48,9 +48,9 @@
   import { ref, computed } from 'vue';
   import Tesseract from 'tesseract.js';
   import mammoth from 'mammoth';
+  import * as pdfjs from 'pdfjs-dist';
+  import { createCanvas } from 'canvas';
 
-  // Set the workerSrc property
-  
   const inputText = ref("");
   const outputText = ref(computed(() => inputText.value.toUpperCase()));
   const file = ref(null);
@@ -89,7 +89,7 @@
         const textItems = textContent.items;
         
         // Add page marker
-        finalString += `\n--- Page ${pageNum} ---\n`;
+        // finalString += `\n--- Page ${pageNum} ---\n`;
         
         // Extract text from current page
         for (let i = 0; i < textItems.length; i++) {
