@@ -4,7 +4,7 @@
       <div class="q-pa-md">
         <q-file
           v-model="file"
-          label="Read PDF file"
+          label="Read PDF/DOCX/DOC"
           filled
           style="max-width: 300px"
           accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -14,7 +14,7 @@
       <div class="q-pa-md">
         <q-file
           v-model="ocrFile"
-          label="OCR PDF file or image"
+          label="OCR Image/PDF"
           filled
           style="max-width: 300px"
           accept="application/pdf,image/*"
@@ -55,6 +55,8 @@
   const outputText = ref(computed(() => inputText.value.toUpperCase()));
   const file = ref(null);
   const ocrFile = ref(null);
+
+  pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
 
   const handleFileChange = async (newFile) => {
     console.log("File changed:", newFile);
@@ -137,18 +139,90 @@
 };
 
 const handleOcrFileChange = async (newFile) => {
-  console.log("OCR File changed:", newFile);
-  if (newFile) {
+    console.log("OCR File changed:", newFile);
+    if (!newFile) return;
+
+    const fileType = newFile.type;
     const reader = new FileReader();
-    reader.onload = async (e) => {
-      const imageData = e.target.result;
-      const { data: { text } } = await Tesseract.recognize(imageData, 'eng', {
-        logger: m => console.log(m)
-      });
-      inputText.value = text;
-    };
-    reader.readAsDataURL(newFile);
-  }
-};
+
+    if (fileType === 'application/pdf') {
+      // Handle PDF files
+      reader.onload = async (e) => {
+        const pdfData = new Uint8Array(e.target.result);
+        const pdf = await pdfjs.getDocument({ data: pdfData }).promise;
+        const numPages = pdf.numPages;
+        let allText = '';
+        
+        // Process each page of the PDF
+        for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+          console.log(`Processing page ${pageNum} of ${numPages}`);
+          const page = await pdf.getPage(pageNum);
+          
+          // Set scale for better OCR results
+          const viewport = page.getViewport({ scale: 2.0 });
+          
+          // Create a canvas - Handle browser environment
+          let canvas;
+          let context;
+          let imageData;
+          
+          try {
+            // Try browser canvas first
+            canvas = document.createElement('canvas');
+            context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            
+            // Render PDF page to canvas
+            await page.render({
+              canvasContext: context,
+              viewport: viewport
+            }).promise;
+            
+            // Get image data for Tesseract
+            imageData = canvas.toDataURL('image/png');
+          } catch (error) {
+            console.error("Browser canvas error, trying Node canvas:", error);
+            // Fall back to Node.js canvas if in Node environment
+            canvas = createCanvas(viewport.width, viewport.height);
+            context = canvas.getContext('2d');
+            
+            // Render PDF page to canvas
+            await page.render({
+              canvasContext: context,
+              viewport: viewport
+            }).promise;
+            
+            // Get buffer for Node.js
+            imageData = canvas.toBuffer('image/png');
+          }
+          
+          // Run OCR on the image
+          const { data: { text } } = await Tesseract.recognize(imageData, 'eng', {
+            logger: m => console.log(`Page ${pageNum}: ${m.status} (${Math.floor(m.progress * 100)}%)`)
+          });
+          
+          // Append text with page separator
+          allText += `\n${text}\n\n`;
+        }
+        
+        // Set the combined text from all pages
+        inputText.value = allText;
+      };
+      
+      reader.readAsArrayBuffer(newFile);
+    } else {
+      // Handle image files (existing code)
+      reader.onload = async (e) => {
+        const imageData = e.target.result;
+        const { data: { text } } = await Tesseract.recognize(imageData, 'eng', {
+          logger: m => console.log(m)
+        });
+        inputText.value = text;
+      };
+      
+      reader.readAsDataURL(newFile);
+    }
+  };
 
 </script>
