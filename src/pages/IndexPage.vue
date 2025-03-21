@@ -7,7 +7,7 @@
           label="Read PDF file"
           filled
           style="max-width: 300px"
-          accept="application/pdf"
+          accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           @update:modelValue="handleFileChange"
         />
       </div>
@@ -47,6 +47,7 @@
 <script setup>
   import { ref, computed } from 'vue';
   import Tesseract from 'tesseract.js';
+  import mammoth from 'mammoth';
 
   // Set the workerSrc property
   
@@ -57,43 +58,83 @@
 
   const handleFileChange = async (newFile) => {
     console.log("File changed:", newFile);
-    if (newFile) {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const typedArray = new Uint8Array(e.target.result);
+    if (!newFile) return;
+
+    const reader = new FileReader();
+    
+    // Determine file type
+    const fileType = newFile.type || newFile.name.split('.').pop().toLowerCase();
+    
+    if (fileType === 'application/pdf' || fileType === 'pdf') {
+    // PDF processing
+    reader.onload = async (e) => {
+      const typedArray = new Uint8Array(e.target.result);
       
-        // Dynamically import pdfjs-dist
-        const pdfjsLib = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/+esm');
+      // Dynamically import pdfjs-dist
+      const pdfjsLib = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/+esm');
       
-        // Set the workerSrc property
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+      // Set the workerSrc property
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
       
-        const pdf = await pdfjsLib.getDocument(typedArray).promise;
+      const pdf = await pdfjsLib.getDocument(typedArray).promise;
+      
+      // Get total page count
+      const numPages = pdf.numPages;
+      let finalString = '';
+      
+      // Iterate through all pages
+      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        const textContent = await page.getTextContent();
+        const textItems = textContent.items;
         
-        // Ermittle die Gesamtzahl der Seiten
-        const numPages = pdf.numPages;
-        let finalString = '';
+        // Add page marker
+        finalString += `\n--- Page ${pageNum} ---\n`;
         
-        // Iteriere durch alle Seiten
-        for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-          const page = await pdf.getPage(pageNum);
-          const textContent = await page.getTextContent();
-          const textItems = textContent.items;
-          
-          // Füge eine Seitenmarkierung hinzu (optional)
-          finalString += `\n--- Seite ${pageNum} ---\n`;
-          
-          // Extrahiere den Text der aktuellen Seite
-          for (let i = 0; i < textItems.length; i++) {
-            finalString += textItems[i].str + ' ';
-          }
+        // Extract text from current page
+        for (let i = 0; i < textItems.length; i++) {
+          finalString += textItems[i].str + ' ';
         }
+      }
+      
+      inputText.value = finalString;
+    };
+    
+    reader.readAsArrayBuffer(newFile);
+  } 
+  else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+           fileType === 'application/msword' || 
+           fileType === 'docx' || 
+           fileType === 'doc') {
+    // Word document processing
+    reader.onload = async (e) => {
+      try {
+        const arrayBuffer = e.target.result;
         
-        inputText.value = finalString;
-      };
-      reader.readAsArrayBuffer(newFile);
-    }
-  };
+        // Use mammoth to convert Word to text
+        const result = await mammoth.extractRawText({arrayBuffer});
+        const text = result.value; // Extracted text
+        
+        // Set the text in the input field
+        inputText.value = text;
+        
+        // Log any warnings
+        if (result.messages.length > 0) {
+          console.warn("Warnings when parsing Word document:", result.messages);
+        }
+      } catch (error) {
+        console.error("Error processing Word document:", error);
+        inputText.value = "Error reading document: " + error.message;
+      }
+    };
+    
+    reader.readAsArrayBuffer(newFile);
+  }
+  else {
+    // Unsupported file type
+    inputText.value = `File type not supported: ${fileType}`;
+  }
+};
 
 const handleOcrFileChange = async (newFile) => {
   console.log("OCR File changed:", newFile);
