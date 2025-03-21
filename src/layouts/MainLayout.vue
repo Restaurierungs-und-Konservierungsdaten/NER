@@ -11,7 +11,7 @@
         />
 
         <q-toolbar-title>
-          WaiRKBLAETTER
+          Werkblatt Annotator
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
