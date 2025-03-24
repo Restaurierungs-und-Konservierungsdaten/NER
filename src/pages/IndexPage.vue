@@ -24,19 +24,28 @@
     </div>
     <div class="row"> 
       <div class="q-pa-md" style="max-width: 300px">
-        <q-input
-          v-model="inputText"
-          filled
-          autogrow
-        />
+        <q-form
+          @submit="onSubmit"
+          @reset="onReset"
+          class="q-gutter-md"
+        >
+          <q-input
+            label="Paste Text"
+            v-model="inputText"
+            filled
+            autogrow
+          />
+          <div>
+            <q-btn label="Absenden" type="submit" color="primary"/>
+            <q-btn label="Zurücksetzen" type="reset" color="primary" flat class="q-ml-sm" />
+          </div>
+        </q-form>
       </div>
-      <div class="q-pa-md" style="max-width: 300px">
-        <q-input
+    <q-input
           v-model="outputText"
           filled
           autogrow
-        />
-      </div>
+    />
 
     </div>
 
