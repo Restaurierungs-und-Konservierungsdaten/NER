@@ -1,15 +1,21 @@
 <template>
   <q-page class="flex flex-center column">
-    <div class="row" > 
+    <div class="row" >
       <div class="q-pa-md">
-        <FileInput @text-generated="updateInputText" />
+        <FileInput 
+          v-model="fileInputRef" 
+          @file-processed="(text) => handleProcessedFile(text, 'fileInput')" 
+        />
       </div>
       <div class="q-pa-md">
-        <OcrFileInput @text-generated="updateInputText" />
+        <OcrFileInput 
+          v-model="ocrFileInputRef" 
+          @file-processed="(text) => handleProcessedFile(text, 'ocrInput')" 
+        />
       </div>
     </div>
-    <div class="row"> 
-      <div class="q-pa-md" style="max-width: 300px">
+    <div class="row">
+      <div class="q-pa-md" style="max-width: 600px">
         <q-form
           @submit="onSubmit"
           @reset="onReset"
@@ -32,8 +38,41 @@
 </template>
 
 <script setup>
-
   import FileInput from '../components/FileInput.vue'
   import OcrFileInput from '../components/OcrFileInput.vue'
+  import { ref } from 'vue'
 
+  const inputText = ref('')
+  const fileInputRef = ref(null)
+  const ocrFileInputRef = ref(null)
+
+  const handleProcessedFile = (text, source) => {
+    inputText.value = text
+
+    // Clear the other input if it exists
+    if (source === 'fileInput' && ocrFileInputRef.value) {
+      // Assuming the file input component has a method to clear its file
+      ocrFileInputRef.value = null
+    } else if (source === 'ocrInput' && fileInputRef.value) {
+      // Assuming the file input component has a method to clear its file
+      fileInputRef.value = null
+    }
+  }
+
+  const onSubmit = () => {
+    console.log("Submitted:", inputText.value)
+  }
+
+  const onReset = () => {
+    console.log("Reset")
+    inputText.value = ''
+    
+    // Clear files in both input components
+    if (fileInputRef.value) {
+      fileInputRef.value = null
+    }
+    if (ocrFileInputRef.value) {
+      ocrFileInputRef.value = null
+    }
+  }
 </script>

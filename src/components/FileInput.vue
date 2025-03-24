@@ -10,11 +10,15 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue';
-    const file = ref(null);
-    import mammoth from 'mammoth';
+  import { ref } from 'vue';
+  import mammoth from 'mammoth';
 
-    const handleFileChange = async (newFile) => {
+  const file = ref(null);
+
+  // Define emits for the component
+  const emit = defineEmits(['file-processed']);
+
+  const handleFileChange = async (newFile) => {
   console.log("File changed:", newFile);
   if (!newFile) return;
   
@@ -42,7 +46,10 @@
     }
     
     console.log("Input text:", inputText);
+    // Emit the processed text to the parent
+    emit('file-processed', inputText);
     return inputText;
+
   } catch (error) {
     console.error("Error processing file:", error);
     alert("Error reading document: " + error.message);

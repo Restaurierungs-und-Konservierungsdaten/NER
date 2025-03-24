@@ -11,19 +11,27 @@
 
 <script setup>
 
-    import { ref } from 'vue';
+  import { ref, getCurrentInstance } from 'vue';
 
-    const ocrFile = ref(null);
-    import Tesseract from 'tesseract.js';
-    import * as pdfjs from 'pdfjs-dist';
-    import { createCanvas } from 'canvas';
+  const ocrFile = ref(null);
+  import Tesseract from 'tesseract.js';
+  import * as pdfjs from 'pdfjs-dist';
+  import { createCanvas } from 'canvas';
+  
+  const emit = defineEmits(['file-processed']);
 
-    pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
-    const ocrLanguage = 'deu';
+  pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+  const ocrLanguage = 'deu';
+  const { proxy } = getCurrentInstance();
 
-    const handleOcrFileChange = async (newFile) => {
+  const handleOcrFileChange = async (newFile) => {
+  // make qFile loading spinner visible
+  proxy.$q.loading.show()
   console.log("OCR File changed:", newFile);
-  if (!newFile) return;
+  if (!newFile) {
+    proxy.$q.loading.hide()
+    return;
+  }
   
   const fileType = newFile.type;
   
@@ -38,12 +46,15 @@
       inputText = await processImageFile(newFile);
     }
     
-    console.log("yallo");
-    console.log("OCR Text:", inputText);
     
+    console.log("OCR Text:", inputText);
+    emit('file-processed', inputText);
+    proxy.$q.loading.hide(); // Hide loading if no file
     return inputText; // Return the text if needed elsewhere
+
   } catch (error) {
     console.error("Error processing file:", error);
+    proxy.$q.loading.hide(); // Hide loading if no file
   }
 };
 
