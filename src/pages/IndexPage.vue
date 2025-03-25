@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="q-pa-md" style="max-width: 600px">
+      <div class="q-pa-md">
         <q-form
           @submit="onSubmit"
           @reset="onReset"
@@ -26,6 +26,7 @@
             v-model="inputText"
             filled
             autogrow
+            style="width: 525px;"
           />
           <div>
             <q-btn label="Absenden" type="submit" color="primary"/>
@@ -41,13 +42,18 @@
   import FileInput from '../components/FileInput.vue'
   import OcrFileInput from '../components/OcrFileInput.vue'
   import { ref } from 'vue'
+  import { pipeline } from '@huggingface/transformers';
+
+  // Allocate a pipeline for sentiment-analysis
+  const pipe = await pipeline('sentiment-analysis');
+  // [{'label': 'POSITIVE', 'score': 0.999817686}]
 
   const inputText = ref('')
   const fileInputRef = ref(null)
   const ocrFileInputRef = ref(null)
 
   const handleProcessedFile = (text, source) => {
-    inputText.value = text
+    inputText.value = text.replace(/\n\s*\n/g, '\n\n');
 
     // Clear the other input if it exists
     if (source === 'fileInput' && ocrFileInputRef.value) {
@@ -60,7 +66,11 @@
   }
 
   const onSubmit = () => {
-    console.log("Submitted:", inputText.value)
+    async function classify(input) {
+      const out = await pipe(input);
+      return out
+    }
+    console.log(classify(inputText.value))
   }
 
   const onReset = () => {
