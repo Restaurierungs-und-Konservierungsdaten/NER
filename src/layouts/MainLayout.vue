@@ -9,13 +9,11 @@
           icon="menu"
           aria-label="Menu"
         />
-
         <q-toolbar-title>
           Werkblatt Annotator
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
-
     <q-page-container>
       <router-view />
     </q-page-container>
