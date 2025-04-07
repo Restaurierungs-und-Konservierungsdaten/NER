@@ -106,7 +106,7 @@ const onSubmit = async () => {
 // Reset handler
 const onReset = () => {
   // Reset all store data
-  store.resetAll()
+  store.resetText()
  
   // Clear files in both input components
   if (fileInputRef.value) {
