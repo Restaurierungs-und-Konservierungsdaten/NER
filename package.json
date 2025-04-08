@@ -19,6 +19,7 @@
     "@quasar/extras": "^1.16.4",
     "axios": "^1.2.1",
     "canvas": "^3.1.0",
+    "gliner": "^0.0.19",
     "mammoth": "^1.9.0",
     "pdfjs-dist": "^4.10.38",
     "pinia": "^3.0.1",

@@ -80,24 +80,53 @@
 
       // Iterate through all concepts
       concepts.forEach(conceptStatement => {
-      const conceptURI = conceptStatement.subject.value;
-      
-      // Find the preferred label for this concept
-      const prefLabelStatements = store.statementsMatching(
-        conceptStatement.subject,
-        SKOS('prefLabel'),
-        null
-      );
-      
-      // Use the first prefLabel found (you may want to filter by language)
-      if (prefLabelStatements.length > 0) {
-        const prefLabel = prefLabelStatements[0].object.value;
-        conceptsMap[conceptURI] = prefLabel;
-      } else {
-        // If no prefLabel found, use the URI as the label or mark as undefined
-        conceptsMap[conceptURI] = undefined;
-      }
-    });
+        const conceptURI = conceptStatement.subject.value;
+        conceptsMap[conceptURI] = {};
+        
+        // Find the preferred label for this concept
+        const prefLabelStatements = store.statementsMatching(
+          conceptStatement.subject,
+          SKOS('prefLabel'),
+          null
+        );
+        
+        // Use the first prefLabel found (you may want to filter by language)
+        if (prefLabelStatements.length > 0) {
+          const prefLabel = prefLabelStatements[0].object.value;
+          conceptsMap[conceptURI]["prefLabel"] = prefLabel;
+        } else {
+          // If no prefLabel found, use the URI as the label or mark as undefined
+          console.error("Error reading file:", "error: No prefLabel found for concept", conceptURI);
+        }
+        // Find the preferred labels for this concept
+        const altLabelStatements = store.statementsMatching(
+          conceptStatement.subject,
+          SKOS('altLabel'),
+          null
+        );
+        if (altLabelStatements.length > 0) {
+          const altLabels = [];
+          altLabelStatements.forEach(altLabelStatement => {
+            const altLabel = altLabelStatement.object.value;
+            altLabels.push(altLabel);
+          });
+          conceptsMap[conceptURI]["altLabel"] = altLabels;
+        }
+
+        // Find the definition for this concept
+        const definitionStatements = store.statementsMatching(
+          conceptStatement.subject,
+          SKOS('definition'),
+          null
+        );
+
+        if (definitionStatements.length > 0) {
+          const definition = definitionStatements[0].object.value;
+          conceptsMap[conceptURI]["definition"] = definition;
+        }
+
+
+      });
       console.log("Concepts Map:", conceptsMap);
 
       emit('thesaurus-processed', conceptsMap);

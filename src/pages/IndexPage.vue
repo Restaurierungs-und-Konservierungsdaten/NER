@@ -34,16 +34,15 @@
             style="width: 400px"
           />
           <div>
-            <q-btn label="Analyze" type="submit" color="primary" :loading="store.isProcessing"/>
+            <q-btn label="Analyze" type="submit" color="primary" />
             <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
           </div>
         </q-form>
       </div>
     </div>
     <div class="q-pa-md">
-      <div class="q-gutter-y-md" style="max-width: 350px">
-        <TabPanels ref="tabPanelsRef" />
-      </div>
+      <ResultCard>
+      </ResultCard>
     </div>
   </q-page>
 </template>
@@ -54,8 +53,7 @@ import { useTextStore } from '../stores/TextStore'
 import FileInput from '../components/FileInput.vue'
 import OcrFileInput from '../components/OcrFileInput.vue'
 import ThesaurusInput from 'src/components/ThesaurusInput.vue'
-import TabPanels from 'src/components/TabPanels.vue'
-
+import ResultCard from 'src/components/ResultCard.vue'
 
 // Access the store
 const store = useTextStore()
@@ -68,7 +66,6 @@ const localInputText = computed({
 
 const fileInputRef = ref(null)
 const ocrFileInputRef = ref(null)
-const tabPanelsRef = ref(null)
 
 // Handle file processing
 const handleProcessedFile = (text, source) => {
@@ -86,8 +83,6 @@ const handleProcessedFile = (text, source) => {
 const handleUploadedThesaurus = (conceptObject) => {
   console.log('Thesaurus processed:', conceptObject)
   store.setThesaurusObject(conceptObject)
-  store.setInputText(JSON.stringify(conceptObject))
-  // Process the thesaurus as needed
 }
 
 // Submit handler
@@ -96,11 +91,8 @@ const onSubmit = async () => {
     console.error('No text to analyze')
     return
   }
-  
-  // Call the calculateResults method on the TabPanels component
-  if (tabPanelsRef.value) {
-    await tabPanelsRef.value.calculateResults()
-  }
+  // Set the analyze flag to true
+  store.setAnalyse(store.inputText)
 }
 
 // Reset handler
