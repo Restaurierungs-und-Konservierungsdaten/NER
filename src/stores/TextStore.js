@@ -5,7 +5,7 @@ export const useTextStore = defineStore('Text', () => {
   // State - only what's needed across components
   const inputText = ref('');
   const thesaurusObject = ref({});
-  const analyse = ref("");
+  const analyse = ref(0);
 
   // Actions
   function setInputText(text) {

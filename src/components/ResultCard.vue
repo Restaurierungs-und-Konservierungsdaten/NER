@@ -1,13 +1,15 @@
 <template>
   <div>
-    <q-card style="width: 400px; margin-bottom: 20px" v-if="result.length > 0">
-      <q-card-section>
-        <h5>Result</h5>
-      </q-card-section>
-      <q-card-section>
-        {{ result.length }} concepts found
-      </q-card-section>
-    </q-card>
+    <div class="q-pa-md">
+      <q-card v-if="conceptResult.length > 0">
+        <q-card-section>
+          <h5>Annotation</h5>
+        </q-card-section>
+        <q-card-section>
+          {{ conceptResult.length }}
+        </q-card-section>
+      </q-card>
+    </div>
     
     <div class="q-pa-md">
       <q-table
@@ -16,8 +18,10 @@
         :columns="columns"
         row-key="uri"
         v-if="tableRows.length > 0"
+        wrap-cells
+        dense
+        class="full-width"
       />
-      <div v-else>No matching concepts found</div>
     </div>
   </div>
 </template>
@@ -27,7 +31,7 @@ import { ref, computed } from 'vue'
 import { useTextStore } from '../stores/TextStore'
 import { watch } from 'vue'
 
-const result = ref([])
+const conceptResult = ref([])
 const store = useTextStore()
 
 const columns = [
@@ -38,7 +42,8 @@ const columns = [
     align: 'left',
     field: row => row.uri,
     format: val => `${val}`,
-    sortable: true
+    sortable: true,
+    style: 'max-width: 25%; word-break: break-word'
   },
   { 
     name: 'prefLabel', 
@@ -61,7 +66,7 @@ const columns = [
 
 // Convert the result array to the format expected by q-table
 const tableRows = computed(() => {
-  return result.value.map(item => ({
+  return conceptResult.value.map(item => ({
     uri: item.uri,
     prefLabel: item.prefLabel,
     altLabels: item.altLabels,
@@ -107,9 +112,9 @@ function calculateResult(text) {
 // Watch for changes to the analyze flag
 watch(() => store.analyse, (newValue) => {
   if (newValue) {
-    result.value = calculateResult(store.inputText)
+    conceptResult.value = calculateResult(store.inputText)
   } else {
-    result.value = []
+    conceptResult.value = []
   }
 })
 </script>
