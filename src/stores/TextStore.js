@@ -3,7 +3,9 @@ import { ref } from 'vue';
 
 export const useTextStore = defineStore('Text', () => {
   // State - only what's needed across components
-  const inputText = ref('');
+  const inputText = ref(
+  `In ein dünnes Edelmetallblech wird mit flachen Punzen eine Grube eingesenkt, in die Stege eingelegt werden, die der Zeichnung entsprechend gebogen sind. Die Zellen werden bis zur Ebene des umgebenden Blechs mit Email gefüllt.
+  `);
   const thesaurusObject = ref({});
   const analyse = ref(0);
 
