@@ -5,14 +5,18 @@
     filled
     style="max-width: 300px"
     @update:modelValue="handleFileChange"
-  />
+  >
+  <template v-slot:label v-if="!file">
+    Konservierungsthesaurus.ttl
+  </template>
+  </q-file>
 </template>
 
 <script setup>
   import { ref, onMounted } from 'vue';
   import { graph, parse, Namespace } from 'rdflib';
 
-  const file = ref({name: 'Konservierungsthesaurus.ttl', type: '', size: 0, content: ''});
+  const file = ref(null) //({name: 'Konservierungsthesaurus.ttl', type: '', size: 0, content: ''});
 
   // Define emits for the component
   const emit = defineEmits(['thesaurus-processed']);
