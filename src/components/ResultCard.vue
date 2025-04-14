@@ -6,7 +6,7 @@
           <h5>Annotation</h5>
         </q-card-section>
         <q-card-section>
-          {{ conceptResult.length }}
+          Annotation Text Placeholder
         </q-card-section>
       </q-card>
     </div>
