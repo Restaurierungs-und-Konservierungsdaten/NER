@@ -6,7 +6,7 @@
           <h5>Annotation</h5>
         </q-card-section>
         <q-card-section>
-          Annotation Text Placeholder
+          {{getNGrams(tokenizeWords(store.inputText), 2)}}
         </q-card-section>
       </q-card>
     </div>
@@ -29,6 +29,7 @@
 import { ref, computed } from 'vue'
 import { useTextStore } from '../stores/TextStore'
 import { watch } from 'vue'
+import { getNGrams, tokenizeWords } from '../utils/nlp.js'; // ,tokenizeSentences
 
 const conceptResult = ref([])
 const store = useTextStore()

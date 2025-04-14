@@ -7,6 +7,7 @@ export const useTextStore = defineStore('Text', () => {
   `In ein dünnes Edelmetallblech wird mit flachen Punzen eine Grube eingesenkt, in die Stege eingelegt werden, die der Zeichnung entsprechend gebogen sind. Die Zellen werden bis zur Ebene des umgebenden Blechs mit Email gefüllt.
   `);
   const thesaurusObject = ref({});
+  const labelObject = ref({});
   const analyse = ref(false);
 
   // Actions
@@ -16,6 +17,10 @@ export const useTextStore = defineStore('Text', () => {
 
   function setThesaurusObject(object) {
     thesaurusObject.value = object;
+  }
+
+  function setLabelObject(object) {
+    labelObject.value = object;
   }
 
   function setAnalyse(value) {
@@ -32,11 +37,13 @@ export const useTextStore = defineStore('Text', () => {
     // State
     inputText,
     thesaurusObject,
+    labelObject,
     analyse,
     
     // Actions
     setInputText,
     setThesaurusObject,
+    setLabelObject,
     setAnalyse,
     resetText
   };

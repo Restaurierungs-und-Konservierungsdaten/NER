@@ -1,3 +1,5 @@
+import {nGram} from 'n-gram'
+
 function tokenizeSentences(text) {
   const segmenterDe = new Intl.Segmenter("de", { granularity: "sentence" });
   const segments = segmenterDe.segment(text);
@@ -10,4 +12,8 @@ function tokenizeWords(text) {
   return Array.from(segments).map((segment) => segment.segment);
 }
 
-export { tokenizeSentences, tokenizeWords };
+function getNGrams(input, n) {
+  return nGram(n)(input);
+}
+
+export { tokenizeSentences, tokenizeWords, getNGrams };
