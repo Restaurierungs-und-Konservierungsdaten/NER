@@ -87,7 +87,7 @@ const onSubmit = async () => {
   }
   // Set the analyse to a random number
   //store.setAnalyse(!store.analyse)
-  store.setAnalyse(Math.floor(Math.random() * 100))
+  store.setAnalyse(!store.analyse)
 }
 // Reset handler
 const onReset = () => {

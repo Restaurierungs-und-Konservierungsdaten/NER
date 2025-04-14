@@ -17,7 +17,6 @@
         :rows="tableRows"
         :columns="columns"
         row-key="uri"
-        v-if="tableRows.length > 0"
         wrap-cells
         dense
         class="full-width"
@@ -113,8 +112,7 @@ function calculateResult(text) {
 watch(() => store.analyse, (newValue) => {
   if (newValue) {
     conceptResult.value = calculateResult(store.inputText)
-  } else {
-    conceptResult.value = []
+    store.setAnalyse(false)
   }
 })
 </script>

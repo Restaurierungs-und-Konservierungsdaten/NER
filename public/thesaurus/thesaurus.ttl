@@ -145,7 +145,7 @@
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/A28B4D> a skos:Concept ;
     skos:altLabel "Auro Öl"@de,
-        "Holzöl"@de ;
+        "Holzöl (Naturharzölimpregniergrund Nr. 121)"@de ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/CCCC7G> ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
     skos:notation "A28B4D" ;
@@ -880,7 +880,7 @@
     skos:definition "Trennvorgang an Materialen (z.B Holz, Stein) oft unter Nutzung natürlicher Schwachstellen/Wachstumslinien/Sedimentlagern. Bei Holz wird der Spaltvorgang radial ausgeführt und folgt den Wachstumsstrukturen (Holzstrahlen). Daher werden die Holzstrahlen nicht verletzt/getrennt wie beim Sägen, das gewonnene Werkstück ist besonders stabil und bruchfest."@de ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
     skos:notation "ADB89D" ;
-    skos:prefLabel "gespalten"@de .
+    skos:prefLabel "gespalten (formgebende Technik)"@de .
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/ADCC8A> a skos:Concept ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/FFA16B> ;
@@ -1724,8 +1724,8 @@ Technologie. München 2000, S. 86.""" ;
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/BD119A> a skos:Concept ;
     dc:source "Reiner Geschke, Keramikrestaurierung (Berlin 2019), S. 150 - 153." ;
-    skos:altLabel "Färben"@de,
-        "Kolorieren"@de ;
+    skos:altLabel "Färben (Retusche)"@de,
+        "Kolorieren (Retusche)"@de ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/CGC619> ;
     skos:definition "Methode zur farbigen Nachfassung ergänzter Bereiche um sie, im Vergleich zum originalen Material, weniger stark in den Vordergrund treten zu lassen. In der Regel werden die Ergänzungen im gleichen Farbton, aber eine Nuance heller als das original Material, eingefärbt."@de ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
@@ -3293,7 +3293,7 @@ Fertigungsverfahren Spanen - Teil 1: Drehen; Einordnung, Unterteilung, Begriffe,
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/D9165B> a skos:Concept ;
     dc:source "CIETA Vocabularies - Vokabular der Textiltechniken" ;
-    skos:altLabel "twist"@en ;
+    skos:altLabel "twist (verzwirnt)"@en ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/A15F83> ;
     skos:definition "kontrollierterer und gezielterer Fertigungsprozess, zur Herstellung von Garnen/Zwirn. Dabei werden zwei oder mehr gesponnene Einzelfäden mit entgegengesetzter Drehrichtung fest miteinander verdreht (Z- oder S-Drehung), um eine stabile, gleichmäßige und glattere Struktur mit höherer Festigkeit und Elastizität zu erzeugen."@de ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
@@ -3378,7 +3378,7 @@ Fertigungsverfahren Spanen - Teil 1: Drehen; Einordnung, Unterteilung, Begriffe,
     dc:source "Annemarie Seiler-Baldinger, Systematik der Textilen Techniken. Basler Beiträge zur Ethnologie 32. Basel: Wepf, 1991, S. 8",
         "CIETA Vocabularies - Vokabular der Textiltechniken" ;
     skos:altLabel "Verdrillen"@de,
-        "twist"@en ;
+        "twist (verdrillt)"@en ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/A15F83> ;
     skos:definition "Verbindungstechnik, bei der zwei oder mehr Fasern, Drähte oder Fäden durch einfaches Verdrehen von Hand miteinander verbunden werden. Diese Technik wird häufig bei der Herstellung von Seilen oder Kordeln angewendet, um die Zugfestigkeit und Stabilität des Materials zu erhöhen. Durch die Verdrehung entsteht eine gleichmäßige, widerstandsfähige Struktur, die je nach Material und Stärke der Verdrillung in ihrer Festigkeit und Elastizität variieren kann."@de ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
@@ -3707,8 +3707,8 @@ Technologie. München 2000, S. 93.""" ;
     skos:prefLabel "Erlenholz"@de .
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/F1F372> a skos:Concept ;
-    skos:altLabel "Färben"@de,
-        "Kolorieren"@de ;
+    skos:altLabel "Färben (Kolorierung)"@de,
+        "Kolorieren (Kolorierung)"@de ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/G79CAC> ;
     skos:definition "Methode zur farbigen Fassung einer angefertigten Nachbildung nach originalem Objektvorbild"@de ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
@@ -3761,7 +3761,7 @@ Technologie. München 2000, S. 93.""" ;
     skos:prefLabel "Abreichungsvergoldung"@de .
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/F3DB41> a skos:Concept ;
-    skos:altLabel "Holzöl"@de ;
+    skos:altLabel "Holzöl (Hartöl Nr. 126)"@de ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/CCCC7G> ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
     skos:notation "F3DB41" ;
@@ -4929,7 +4929,7 @@ Technologie. München 2000, S. 86.""" ;
     dc:source "DIN CEN/TS 17135:2021-02, Erhaltung des kulturellen Erbes - Allgemeine Begriffe zur Beschreibung von Veränderungen an Objekten; Dreisprachige Fassung CEN/TS 17135:2020, Deutsches Institut für Normung." ;
     skos:altLabel "Spalt"@de,
         "Sprung"@de,
-        "gespalten"@de ;
+        "gespalten (Kohäsionsverlust)"@de ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/CB9GD3> ;
     skos:definition "Das vormals fest gefügte Material weist eine Teilung ohne vollständiges Auseinanderbrechen des Objektes auf."@de ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
@@ -5347,7 +5347,7 @@ Technologie. München 2000, S. 95.""" ;
     skos:definition "Produktname für verschiedene Varianten pyrogener Kieselsäure der Firma Evonik Industries (früher Degussa)."@de ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
     skos:notation "GGFD3F" ;
-    skos:prefLabel "Aerosil"@de .
+    skos:prefLabel "Aerosil Kieselsäure"@de .
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/A19F86> a skos:Concept ;
     dc:source "Reiner Geschke, Keramikrestaurierung (Berlin 2019), S.16/17." ;
@@ -5510,7 +5510,7 @@ Technologie. München 2000, S. 95.""" ;
     dc:source "Barbara Stuart, Analytical Techniques in Materials Conservation (West Sussex 2007).",
         "William D. Callister, David G. Rethwisch, Materials Science and Engineering. An Introduction (New Jersey 2018)10." ;
     skos:altLabel "REM"@de,
-        "SEM"@en,
+        "SEM (Mikroskop)"@en,
         "scanning electron microscope"@en ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/B538AG> ;
     skos:closeMatch <http%3A//vocab.getty.edu/page/aat/300024596> ;
@@ -5693,7 +5693,7 @@ Technologie. München 2000, S. 95.""" ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/G13A7B> ;
     skos:definition "Methode mit dem die Objektoberfläche durch das Abrastern mit einem Elektronenstrahl vergrößert abgebildet wird. Erzeugt wird das Bild der Objektoberfläche durch die Wechselwirkungen der Elektronen mit dem Objekt."@de ;
     skos:inScheme <https://www.lassemempel.github.io/terminologies/conservationthesaurus> ;
-    skos:notation "D3BFFF" ;
+    skos:notation "D3BFFF (Strukturanalyse)" ;
     skos:prefLabel "Rasterelektronenmikroskopie"@de ;
     skos:related <https://www.lassemempel.github.io/terminologies/conservationthesaurus/B764C6> .
 
@@ -6386,7 +6386,7 @@ Technologie. München 2000, S. 63.""" ;
     dc:source "Reiner Geschke, Keramikrestaurierung (Berlin 2019), S. 104.",
         "Velson Horie, Materials for Conservation. Organic consolidants, adhesives and coatings (London 2010)2, S. 307.",
         "https://www.wacker.com/h/medias/6415-DE-Silicone.pdf" ;
-    skos:altLabel "Aerosil"@de,
+    skos:altLabel "Aerosil (Füllstoff)"@de,
         "Pyrogenes Siliziumdioxid"@de,
         "amorphe Kieselsäure"@de,
         "fumed silica"@en ;
@@ -7206,7 +7206,7 @@ Technologie. München 2000, S. 93.""" ;
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/A889A3> a skos:Concept ;
     dc:source "DIN CEN/TS 17135:2021-02, Erhaltung des kulturellen Erbes - Allgemeine Begriffe zur Beschreibung von Veränderungen an Objekten; Dreisprachige Fassung CEN/TS 17135:2020, Deutsches Institut für Normung." ;
-    skos:altLabel "Ablagerung"@de,
+    skos:altLabel "Ablagerung (Schadensursache)"@de,
         "Schmutz"@de ;
     skos:broader <https://www.lassemempel.github.io/terminologies/conservationthesaurus/F964CG> ;
     skos:definition "Schadensphänomen, das durch Ablagerung unerwünschter Substanz die Lesbarkeit des Objektes vermindert"@de ;
@@ -7297,7 +7297,7 @@ Technologie. München 2000, S. 93.""" ;
         <https://www.lassemempel.github.io/terminologies/conservationthesaurus/C82F3D>,
         <https://www.lassemempel.github.io/terminologies/conservationthesaurus/G57G31> ;
     skos:notation "BBF64G" ;
-    skos:prefLabel "Ablagerung"@de .
+    skos:prefLabel "Ablagerung (Schadensphänomen)"@de .
 
 <https://www.lassemempel.github.io/terminologies/conservationthesaurus/BC5B57> a skos:Concept ;
     dc:source "DIN EN 15898:2020-02, Erhaltung des kulturellen Erbes - Allgemeine Begriffe; Dreisprachige Fassung EN 15898:2019, Deutsches Institut für Normung." ;

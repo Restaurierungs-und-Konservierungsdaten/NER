@@ -7,7 +7,7 @@ export const useTextStore = defineStore('Text', () => {
   `In ein dünnes Edelmetallblech wird mit flachen Punzen eine Grube eingesenkt, in die Stege eingelegt werden, die der Zeichnung entsprechend gebogen sind. Die Zellen werden bis zur Ebene des umgebenden Blechs mit Email gefüllt.
   `);
   const thesaurusObject = ref({});
-  const analyse = ref(0);
+  const analyse = ref(false);
 
   // Actions
   function setInputText(text) {
