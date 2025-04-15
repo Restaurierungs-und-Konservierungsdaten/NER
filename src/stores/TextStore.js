@@ -8,8 +8,8 @@ export const useTextStore = defineStore('Text', () => {
   `);
   const thesaurusObject = ref({});
   const labelObject = ref({});
-  const resultObject = ref({});
-  const analyse = ref(false);
+  const annotationResultObject = ref({});
+  const tableResultObject = ref({});
 
   // Actions
   function setInputText(text) {
@@ -24,14 +24,20 @@ export const useTextStore = defineStore('Text', () => {
     labelObject.value = object;
   }
 
-  function setAnalyse(value) {
-    analyse.value = value;
+  function setAnnotationResultObject(object) {
+    annotationResultObject.value = object;
+  }
+
+  function setTableResultObject(object) {
+    tableResultObject.value = object;
   }
   
   function resetText() {
     inputText.value = '';
     thesaurusObject.value = {};
-    analyse.value = '';
+    labelObject.value = {};
+    annotationResultObject.value = {};
+    tableResultObject.value = {};
   }
 
   return {
@@ -39,13 +45,14 @@ export const useTextStore = defineStore('Text', () => {
     inputText,
     thesaurusObject,
     labelObject,
-    analyse,
+    annotationResultObject,
     
     // Actions
     setInputText,
     setThesaurusObject,
     setLabelObject,
-    setAnalyse,
+    setAnnotationResultObject,
+    setTableResultObject,
     resetText
   };
 });

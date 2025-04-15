@@ -53,6 +53,7 @@ import FileInput from '../components/FileInput.vue'
 import OcrFileInput from '../components/OcrFileInput.vue'
 import ThesaurusInput from 'src/components/ThesaurusInput.vue'
 import ResultCard from 'src/components/ResultCard.vue'
+import { calculateResults } from '../utils/annotationResult.js'; 
 
 // Access the store
 const store = useTextStore()
