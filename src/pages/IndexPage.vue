@@ -3,7 +3,6 @@
     <div class="container">
       <div class="q-pa-md">
         <ThesaurusInput
-          @thesaurus-processed="(object) => handleUploadedThesaurus(object)"
         />
       </div>
       <div class="row">
@@ -54,15 +53,19 @@ import FileInput from '../components/FileInput.vue'
 import OcrFileInput from '../components/OcrFileInput.vue'
 import ThesaurusInput from 'src/components/ThesaurusInput.vue'
 import ResultCard from 'src/components/ResultCard.vue'
+
 // Access the store
 const store = useTextStore()
+
 // Local reactive state for input - synced with store
 const localInputText = computed({
   get: () => store.inputText,
   set: (value) => store.setInputText(value)
 })
+
 const fileInputRef = ref(null)
 const ocrFileInputRef = ref(null)
+
 // Handle file processing
 const handleProcessedFile = (text, source) => {
   store.setInputText(text.replace(/\n\s*\n/g, '\n\n'))
@@ -74,11 +77,7 @@ const handleProcessedFile = (text, source) => {
     fileInputRef.value = null
   }
 }
-// Handle thesaurus processing
-const handleUploadedThesaurus = (conceptObject) => {
-  console.log('Thesaurus processed:', conceptObject)
-  store.setThesaurusObject(conceptObject)
-}
+
 // Submit handler
 const onSubmit = async () => {
   if (!store.inputText.trim()) {

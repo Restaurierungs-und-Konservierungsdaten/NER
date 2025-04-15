@@ -8,6 +8,7 @@ export const useTextStore = defineStore('Text', () => {
   `);
   const thesaurusObject = ref({});
   const labelObject = ref({});
+  const resultObject = ref({});
   const analyse = ref(false);
 
   // Actions

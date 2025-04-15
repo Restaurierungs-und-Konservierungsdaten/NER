@@ -16,4 +16,8 @@ function getNGrams(input, n) {
   return nGram(n)(input);
 }
 
-export { tokenizeSentences, tokenizeWords, getNGrams };
+function lowerCase(input) {
+  return input.toLowerCase();
+}
+
+export { tokenizeSentences, tokenizeWords, getNGrams, lowerCase };

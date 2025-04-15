@@ -21,6 +21,7 @@ function processTurtleContent(fileContent) {
   );
   // Create the output object
   const conceptsMap = {};
+  const labelsMap = {};
   // Iterate through all concepts
   concepts.forEach(conceptStatement => {
     const conceptURI = conceptStatement.subject.value;
@@ -45,6 +46,7 @@ function processTurtleContent(fileContent) {
       // If we get here, the prefLabel is valid, so initialize the concept in the map
       conceptsMap[conceptURI] = {};
       conceptsMap[conceptURI]["prefLabel"] = prefLabel;
+      AddLabelToMap(conceptURI, prefLabel, labelsMap);
     } else {
       // If no prefLabel found, use the URI as the label or mark as undefined
       console.error("Error reading file:", "error: No prefLabel found for concept", conceptURI);
@@ -62,6 +64,7 @@ function processTurtleContent(fileContent) {
       altLabelStatements.forEach(altLabelStatement => {
         const altLabel = altLabelStatement.object.value;
         altLabels.push(altLabel);
+        AddLabelToMap(conceptURI, altLabel, labelsMap);
       });
       conceptsMap[conceptURI]["altLabel"] = altLabels;
     }
@@ -77,8 +80,18 @@ function processTurtleContent(fileContent) {
       conceptsMap[conceptURI]["definition"] = definition;
     }
   });
-  console.log("Concepts map:", conceptsMap);
-  return conceptsMap;
+  return [conceptsMap, labelsMap];
+}
+
+function AddLabelToMap(conceptURI, label, map) {
+  // delete brackets and content in brackets from label
+  label = label.replace(/[([][^()[\]]*[)\]]/g, "").trim();
+  // Check if the concept already exists in the map
+  if (!map[label]) {
+    map[label] = [conceptURI];
+  } else {
+    map[label].push(conceptURI);
+  }
 }
   
   export { processTurtleContent };

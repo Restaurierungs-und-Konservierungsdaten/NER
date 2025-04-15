@@ -16,11 +16,11 @@
 <script setup>
   import { ref, onMounted } from 'vue';
   import { processTurtleContent } from '../utils/rdf.js'; // Adjust the import path as necessary
+  import { useTextStore } from '../stores/TextStore'
+
+  const store = useTextStore()
 
   const file = ref(null) //({name: 'Konservierungsthesaurus.ttl', type: '', size: 0, content: ''});
-
-  // Define emits for the component
-  const emit = defineEmits(['thesaurus-processed']);
   
   // Hardcoded path to default thesaurus
   const defaultThesaurusPath = 'thesaurus/thesaurus.ttl'; // ../../public/
@@ -33,7 +33,11 @@
         throw new Error(`Failed to fetch default thesaurus: ${response.status}`);
       }
       const fileContent = await response.text();
-      emit('thesaurus-processed', processTurtleContent(fileContent));
+      const maps = processTurtleContent(fileContent);
+      store.setThesaurusObject(maps[0]);
+      console.log("Thesaurus object:", maps[0]);
+      store.setLabelObject(maps[1]);
+      console.log("Labels object:", maps[1]);
     } catch (error) {
       console.error("Error loading default thesaurus:", error);
     }
