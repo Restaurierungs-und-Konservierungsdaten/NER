@@ -20,4 +20,18 @@ function lowerCase(input) {
   return input.toLowerCase();
 }
 
-export { tokenizeSentences, tokenizeWords, getNGrams, lowerCase };
+function indexArrayOfSubstrings(str, searchValue) {
+  let i = 0;
+  const searchValueLenght = searchValue.length
+  console.log(searchValueLenght)
+  const indices = [];
+  while (true) {
+    const r = str.indexOf(searchValue, i);
+    if (r !== -1) {
+      indices.push([r, r+searchValueLenght]);
+      i = r + 1;
+    } else return indices;
+  }
+};
+
+export { tokenizeSentences, tokenizeWords, getNGrams, lowerCase, indexArrayOfSubstrings };
