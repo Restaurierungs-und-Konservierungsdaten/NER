@@ -6,22 +6,22 @@ export const useTextStore = defineStore('Text', () => {
   const inputText = ref(
   `In ein dünnes Edelmetallblech wird mit flachen Punzen eine Grube eingesenkt, in die Stege eingelegt werden, die der Zeichnung entsprechend gebogen sind. Die Zellen werden bis zur Ebene des umgebenden Blechs mit Email gefüllt.
   `);
-  const thesaurusObject = ref({});
-  const labelObject = ref({});
+  const conceptsMap = ref({});
+  const labelsMap = ref({});
   const annotationResultObject = ref({});
-  const tableResultObject = ref({});
+  const tableResultObject = ref([]);
 
   // Actions
   function setInputText(text) {
     inputText.value = text;
   }
 
-  function setThesaurusObject(object) {
-    thesaurusObject.value = object;
+  function setConceptsMap(object) {
+    conceptsMap.value = object;
   }
 
-  function setLabelObject(object) {
-    labelObject.value = object;
+  function setLabelsMap(object) {
+    labelsMap.value = object;
   }
 
   function setAnnotationResultObject(object) {
@@ -34,23 +34,24 @@ export const useTextStore = defineStore('Text', () => {
   
   function resetText() {
     inputText.value = '';
-    thesaurusObject.value = {};
-    labelObject.value = {};
+    conceptsMap.value = {};
+    labelsMap.value = {};
     annotationResultObject.value = {};
-    tableResultObject.value = {};
+    tableResultObject.value = [];
   }
 
   return {
     // State
     inputText,
-    thesaurusObject,
-    labelObject,
+    conceptsMap,
+    labelsMap,
     annotationResultObject,
+    tableResultObject,
     
     // Actions
     setInputText,
-    setThesaurusObject,
-    setLabelObject,
+    setConceptsMap,
+    setLabelsMap,
     setAnnotationResultObject,
     setTableResultObject,
     resetText

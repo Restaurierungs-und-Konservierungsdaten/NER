@@ -1,36 +1,32 @@
-function calculateResult(text, thesaurusObject) {
-    console.log('inputText:', text)
+function calculateResult(text, labelsMap, conceptsMap) {
     const normdataArray = []
+    const annotatedText = text
     
-    for (const [uri, value] of Object.entries(thesaurusObject)) {
-      let allLabels = []
-      
-      // Correctly handle altLabels
-      if (value.altLabels && Array.isArray(value.altLabels)) {
-        allLabels = [...value.altLabels]
-      }
-      
-      // Add prefLabel to allLabels
-      if (value.prefLabel) {
-        allLabels.push(value.prefLabel)
-      }
-      
+    for (const [label, uriArray] of Object.entries(labelsMap)) {
+      console.log('Label:', label)
       // Check if any label is in the text
-      for (let label of allLabels) {
-        if (text.includes(label)) {
-          // Add this concept to our results
-          normdataArray.push({
+      if (text.includes(label)) {
+        // Add this concept to our results
+        for (const uri of uriArray) {
+          console.log('URI:', uri)
+          const conceptValues = conceptsMap[uri]
+          const prefLabel = conceptValues.prefLabel
+          const altLabels = conceptValues.altLabel || []
+          const definition = conceptValues.definition || ''
+          // Check if the concept is already in the array
+          const conceptObject = {
             uri: uri,
-            prefLabel: value.prefLabel,
-            altLabels: value.altLabels || [],
-            definition: value.definition
-          })
-          break // Only add each concept once
+            prefLabel: prefLabel,
+            altLabels: altLabels,
+            definition: definition
+          }
+          console.log('Concept Object:', conceptObject)
+          normdataArray.push(conceptObject)
         }
-      }
+      } 
     }
     
-    return normdataArray
-  }
+  return [annotatedText, normdataArray]
+}
 
   export { calculateResult };

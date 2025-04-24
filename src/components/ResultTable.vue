@@ -2,7 +2,7 @@
     <div class="q-pa-md">
       <q-table
         title="SKOS Concepts"
-        :rows="tableRows"
+        :rows="store.tableResultObject"
         :columns="columns"
         row-key="uri"
         wrap-cells
@@ -16,7 +16,6 @@
 
 import { useTextStore } from '../stores/TextStore'
 const store = useTextStore()
-
 
 const columns = [
   {
@@ -47,15 +46,5 @@ const columns = [
     field: 'definition' 
   }
 ]
-
-// Convert the result array to the format expected by q-table
-const tableRows = computed(() => {
-  return conceptResult.value.map(item => ({
-    uri: item.uri,
-    prefLabel: item.prefLabel,
-    altLabels: item.altLabels,
-    definition: item.definition
-  }))
-})
 
 </script>

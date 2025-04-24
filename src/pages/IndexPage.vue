@@ -43,17 +43,27 @@
         <ResultCard>
         </ResultCard>
       </div>
+      <div class="q-pa-md">
+        <ResultTable>
+        </ResultTable>
+      </div>
     </div>
   </q-page>
 </template>
 <script setup>
 import { ref, computed } from 'vue'
 import { useTextStore } from '../stores/TextStore'
+import { useQuasar } from 'quasar'
+
 import FileInput from '../components/FileInput.vue'
 import OcrFileInput from '../components/OcrFileInput.vue'
 import ThesaurusInput from 'src/components/ThesaurusInput.vue'
 import ResultCard from 'src/components/ResultCard.vue'
-import { calculateResults } from '../utils/annotationResult.js'; 
+import ResultTable from 'src/components/ResultTable.vue'
+
+import { calculateResult } from '../utils/annotationResult.js'; 
+
+const $q = useQuasar()
 
 // Access the store
 const store = useTextStore()
@@ -82,12 +92,17 @@ const handleProcessedFile = (text, source) => {
 // Submit handler
 const onSubmit = async () => {
   if (!store.inputText.trim()) {
-    console.error('No text to analyze')
+    $q.notify('No text to analyze')
     return
   }
-  // Set the analyse to a random number
-  //store.setAnalyse(!store.analyse)
-  store.setAnalyse(!store.analyse)
+  // Call the function to calculate results
+  const result = calculateResult(store.inputText, store.labelsMap, store.conceptsMap)
+  const tableResultObject = result[1]
+  console.log('tableResultObject:', result)
+  const annotationResultObject = result[0]
+  console.log('annotationResultObject:', annotationResultObject)
+  store.setTableResultObject(tableResultObject)
+  store.setAnnotationResultObject(annotationResultObject)
 }
 // Reset handler
 const onReset = () => {

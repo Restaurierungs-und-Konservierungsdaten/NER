@@ -34,9 +34,9 @@
       }
       const fileContent = await response.text();
       const maps = processTurtleContent(fileContent);
-      store.setThesaurusObject(maps[0]);
+      store.setConceptsMap(maps[0]);
       console.log("Thesaurus object:", maps[0]);
-      store.setLabelObject(maps[1]);
+      store.setLabelsMap(maps[1]);
       console.log("Labels object:", maps[1]);
     } catch (error) {
       console.error("Error loading default thesaurus:", error);
@@ -85,7 +85,11 @@
     const reader = new FileReader();
     reader.onload = async (event) => {
       const fileContent = event.target.result;
-      processTurtleContent(fileContent);
+      const maps = processTurtleContent(fileContent);
+      store.setConceptsMap(maps[0]);
+      console.log("Thesaurus object:", maps[0]);
+      store.setLabelsMap(maps[1]);
+      console.log("Labels object:", maps[1]);
     };
     reader.onerror = (error) => {
       console.error("Error reading file:", error);
