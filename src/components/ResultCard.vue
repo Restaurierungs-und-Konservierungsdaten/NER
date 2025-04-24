@@ -5,17 +5,33 @@
         <h5>Annotation</h5>
       </q-card-section>
       <q-card-section>
-        {{ store.annotationResultObject }}
+        <div v-for="(sentence, sIndex) in store.annotationResultObject" 
+             :key="sIndex" 
+             class="sentence q-mb-sm">
+          <span v-for="(segment, segIndex) in sentence.segments" 
+                :key="`${sIndex}-${segIndex}`"
+                :class="{ 'highlighted-text': segment.highlighted }">
+            {{ segment.text }}
+          </span>
+        </div>
       </q-card-section>
     </q-card>
   </div>
 </template>
 
 <script setup>
-//import { ref } from 'vue'
 import { useTextStore } from '../stores/TextStore'
-//import { getNGrams, tokenizeWords } from '../utils/nlp.js'; // ,tokenizeSentences
 
 const store = useTextStore()
-
 </script>
+
+<style scoped>
+.sentence {
+  line-height: 1.6;
+}
+
+.highlighted-text {
+  color: blue;
+  font-weight: 500;
+}
+</style>
