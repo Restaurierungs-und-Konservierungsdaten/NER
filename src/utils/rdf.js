@@ -53,11 +53,14 @@ function processTurtleContent(fileContent) {
       return; // Skip this concept and continue with the next one
     }
     
-    // Find the alternative labels for this concept
+    // Find the german alternative labels for this concept
     const altLabelStatements = store.statementsMatching(
       conceptStatement.subject,
       SKOS('altLabel'),
       null
+      ).filter(statement => 
+      statement.object.termType === 'Literal' && 
+      statement.object.language === 'de'
     );
     if (altLabelStatements.length > 0) {
       const altLabels = [];

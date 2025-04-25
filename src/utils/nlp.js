@@ -20,6 +20,10 @@ function lowerCase(input) {
   return input.toLowerCase();
 }
 
+function upperCase(input) {
+  return input.toUpperCase();
+}
+
 function indexArrayOfSubstrings(str, searchValue) {
   let i = 0;
   const searchValueLenght = searchValue.length
@@ -34,4 +38,4 @@ function indexArrayOfSubstrings(str, searchValue) {
   }
 };
 
-export { tokenizeSentences, tokenizeWords, getNGrams, lowerCase, indexArrayOfSubstrings };
+export { tokenizeSentences, tokenizeWords, getNGrams, lowerCase, indexArrayOfSubstrings, upperCase };

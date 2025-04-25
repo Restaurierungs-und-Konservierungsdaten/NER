@@ -1,4 +1,4 @@
-import { tokenizeSentences, lowerCase, indexArrayOfSubstrings } from '../utils/nlp.js';
+import { tokenizeSentences, lowerCase, indexArrayOfSubstrings, upperCase } from '../utils/nlp.js';
 
 function calculateResult(text, labelsMap, conceptsMap) {
   const normdataArray = [];
@@ -20,12 +20,16 @@ function calculateResult(text, labelsMap, conceptsMap) {
     
     // Find all labels in the current sentence
     for (const [label, uriArray] of Object.entries(labelsMap)) {
-
+      //let labelLength = label.length;
       let lowerCasedLabel = label;
-      if (label.length > 3) {
+      let lowerCasedSentence = sentence;
+      // Check if the label is in uppercase
+      // If so, convert it and sentence to lowercase for matching
+      if (upperCase(label) != label) {
         lowerCasedLabel = lowerCase(label)
+        lowerCasedSentence = lowerCase(sentence);
       }
-      const lowerCasedSentence = lowerCase(sentence);
+      
       const indices = indexArrayOfSubstrings(lowerCasedSentence, lowerCasedLabel);
       
       if (indices.length > 0) {
