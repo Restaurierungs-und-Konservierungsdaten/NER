@@ -27,7 +27,7 @@ function upperCase(input) {
 function indexArrayOfSubstrings(str, searchValue) {
   let i = 0;
   const searchValueLenght = searchValue.length
-  console.log(searchValueLenght)
+  //console.log(searchValueLenght)
   const indices = [];
   while (true) {
     const r = str.indexOf(searchValue, i);

@@ -21,17 +21,35 @@ function calculateResult(text, labelsMap, conceptsMap) {
     // Find all labels in the current sentence
     for (const [label, uriArray] of Object.entries(labelsMap)) {
       //let labelLength = label.length;
-      let lowerCasedLabel = label;
-      let lowerCasedSentence = sentence;
+      let indexLabel = label;
+      let indexSentence = sentence;
       // Check if the label is in uppercase
       // If so, convert it and sentence to lowercase for matching
       if (upperCase(label) != label) {
-        lowerCasedLabel = lowerCase(label)
-        lowerCasedSentence = lowerCase(sentence);
+        indexLabel = lowerCase(label)
+        indexSentence = lowerCase(sentence);
       }
       
-      const indices = indexArrayOfSubstrings(lowerCasedSentence, lowerCasedLabel);
-      
+      let indices = indexArrayOfSubstrings(indexSentence, indexLabel);
+      // delete indices for labels with lenght < 4, which don't fill the whole word
+      if (indexLabel.length < 4) {
+        const filteredIndices = [];
+        for (const [start, end] of indices) {
+          // Check if this is a complete word by verifying:
+          // 1. Either at beginning of string OR preceded by non-alphabetic character
+          // 2. Either at end of string OR followed by non-alphabetic character
+          const isWordStart = start === 0 || !/[a-zA-Z]/.test(indexSentence[start - 1]);
+          const isWordEnd = end === indexSentence.length || !/[a-zA-Z]/.test(indexSentence[end]);
+          
+          if (isWordStart && isWordEnd) {
+            filteredIndices.push([start, end]);
+          }
+        }
+        
+        indices = filteredIndices;
+      }
+      // Check if any indices were found
+
       if (indices.length > 0) {
         // Add concept information to normdataArray
         for (const uri of uriArray) {
