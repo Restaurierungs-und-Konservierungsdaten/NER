@@ -15,7 +15,7 @@
 
 <script setup>
   import { ref, onMounted } from 'vue';
-  import { processTurtleContent } from '../utils/rdf.js'; // Adjust the import path as necessary
+  import { processTurtleContent } from '../utils/rdf.js';  
   import { useTextStore } from '../stores/TextStore'
 
   const store = useTextStore()
@@ -32,12 +32,17 @@
       if (!response.ok) {
         throw new Error(`Failed to fetch default thesaurus: ${response.status}`);
       }
-      const fileContent = await response.text();
-      const maps = processTurtleContent(fileContent);
-      store.setConceptsMap(maps[0]);
-      console.log("Thesaurus object:", maps[0]);
-      store.setLabelsMap(maps[1]);
-      console.log("Labels object:", maps[1]);
+
+      // Get blob directly from the response
+      const blob = await response.blob();
+
+      // Create a File object from the fetched content
+      const fileName = defaultThesaurusPath.split('/').pop();
+      const fileObject = new File([blob], fileName, { type: 'text/turtle' });
+      
+      // Use the existing processTurtleFile function with the File object
+      processTurtleFile(fileObject);
+
     } catch (error) {
       console.error("Error loading default thesaurus:", error);
     }
@@ -52,31 +57,6 @@
     if (newFile.name.endsWith('.ttl')) {
       processTurtleFile(newFile);
     } 
-    
-    /* deal with json files
-    else if (newFile.name.endsWith('.json')) {
-      // Handle JSON files
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const fileContent = event.target.result;
-        console.log("File content:", fileContent);
-        // Parse the JSON content
-        try {
-          const jsonData = JSON.parse(fileContent);
-          console.log("Parsed JSON Data:", jsonData);
-          emit('thesaurus-processed', jsonData);
-        } catch (error) {
-          console.error("Error parsing JSON:", error);
-          alert("Error parsing JSON: " + error.message);
-        }
-      };
-      reader.onerror = (error) => {
-        console.error("Error reading file:", error);
-        alert("Error reading file: " + error.message);
-      };
-      reader.readAsText(newFile);
-    }
-    */
   };
 
   // Helper function to process Turtle files from upload
@@ -86,10 +66,15 @@
     reader.onload = async (event) => {
       const fileContent = event.target.result;
       const maps = processTurtleContent(fileContent);
-      store.setConceptsMap(maps[0]);
-      console.log("Thesaurus object:", maps[0]);
-      store.setLabelsMap(maps[1]);
-      console.log("Labels object:", maps[1]);
+
+      const conceptsMap = maps[0];
+      console.log("conceptsMap:", conceptsMap);
+      store.setConceptsMap(conceptsMap);
+      
+      const labelsMap = maps[1];
+      console.log("labelsMap:", labelsMap);
+      store.setLabelsMap(labelsMap);
+      
     };
     reader.onerror = (error) => {
       console.error("Error reading file:", error);

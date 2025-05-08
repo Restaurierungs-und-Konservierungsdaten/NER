@@ -38,4 +38,5 @@ function indexArrayOfSubstrings(str, searchValue) {
   }
 };
 
+
 export { tokenizeSentences, tokenizeWords, getNGrams, lowerCase, indexArrayOfSubstrings, upperCase };

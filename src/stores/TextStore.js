@@ -1,5 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
+import { generateStemmedLabelsMap } from '../utils/helper.js';
 
 export const useTextStore = defineStore('Text', () => {
   // State - only what's needed across components
@@ -8,6 +9,7 @@ export const useTextStore = defineStore('Text', () => {
   `);
   const conceptsMap = ref({});
   const labelsMap = ref({});
+  const stemmedLabelsMap = ref({});
   const annotationResultObject = ref({});
   const tableResultObject = ref([]);
 
@@ -22,6 +24,13 @@ export const useTextStore = defineStore('Text', () => {
 
   function setLabelsMap(object) {
     labelsMap.value = object;
+    const stemmedMap = generateStemmedLabelsMap(labelsMap.value);
+    setStemmedLabelsMap(stemmedMap);
+  }
+
+  function setStemmedLabelsMap(object) {
+    stemmedLabelsMap.value = object;
+    console.log("stemmedLabelsMap:", stemmedLabelsMap);
   }
 
   function setAnnotationResultObject(object) {
@@ -36,6 +45,7 @@ export const useTextStore = defineStore('Text', () => {
     inputText.value = '';
     conceptsMap.value = {};
     labelsMap.value = {};
+    stemmedLabelsMap.value = {};
     annotationResultObject.value = {};
     tableResultObject.value = [];
   }
@@ -45,6 +55,7 @@ export const useTextStore = defineStore('Text', () => {
     inputText,
     conceptsMap,
     labelsMap,
+    stemmedLabelsMap,
     annotationResultObject,
     tableResultObject,
     
@@ -52,6 +63,7 @@ export const useTextStore = defineStore('Text', () => {
     setInputText,
     setConceptsMap,
     setLabelsMap,
+    setStemmedLabelsMap,
     setAnnotationResultObject,
     setTableResultObject,
     resetText
