@@ -1,7 +1,8 @@
 <template>
     <div class="q-pa-md">
       <q-table
-        title="SKOS Concepts"
+        v-if ="store.tableResultObject.length > 0"
+        title="Konzepte"
         :rows="store.tableResultObject"
         :columns="columns"
         row-key="uri"

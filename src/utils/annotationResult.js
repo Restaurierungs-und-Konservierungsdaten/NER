@@ -1,6 +1,7 @@
 import { tokenizeSentences, lowerCase, indexArrayOfSubstrings, upperCase } from '../utils/nlp.js';
 
-function calculateResult(text, labelsMap, conceptsMap) {
+function calculateResult(text, labelsMap, stemmedLabelsMap, conceptsMap, stemming) {
+  console.log("Stemming:", stemming);
   const normdataArray = [];
   const sentences = tokenizeSentences(text);
   
@@ -23,8 +24,7 @@ function calculateResult(text, labelsMap, conceptsMap) {
       //let labelLength = label.length;
       let indexLabel = label;
       let indexSentence = sentence;
-      // Check if the label is in uppercase
-      // If so, convert it and sentence to lowercase for matching
+      // lowercase label for matching if not all uppercase
       if (upperCase(label) != label) {
         indexLabel = lowerCase(label)
         indexSentence = lowerCase(sentence);
@@ -35,12 +35,9 @@ function calculateResult(text, labelsMap, conceptsMap) {
       if (indexLabel.length < 4) {
         const filteredIndices = [];
         for (const [start, end] of indices) {
-          // Check if this is a complete word by verifying:
-          // 1. Either at beginning of string OR preceded by non-alphabetic character
-          // 2. Either at end of string OR followed by non-alphabetic character
+          // Check if match is a complete word
           const isWordStart = start === 0 || !/[a-zA-Z]/.test(indexSentence[start - 1]);
-          const isWordEnd = end === indexSentence.length || !/[a-zA-Z]/.test(indexSentence[end]);
-          
+          const isWordEnd = end === indexSentence.length || !/[a-zA-Z]/.test(indexSentence[end + 1]);
           if (isWordStart && isWordEnd) {
             filteredIndices.push([start, end]);
           }

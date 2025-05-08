@@ -24,13 +24,13 @@ export const useTextStore = defineStore('Text', () => {
 
   function setLabelsMap(object) {
     labelsMap.value = object;
-    const stemmedMap = generateStemmedLabelsMap(labelsMap.value);
-    setStemmedLabelsMap(stemmedMap);
+    setStemmedLabelsMap(generateStemmedLabelsMap(object));
   }
 
   function setStemmedLabelsMap(object) {
+    console.log("stemmedLabelsMap:", object);
     stemmedLabelsMap.value = object;
-    console.log("stemmedLabelsMap:", stemmedLabelsMap);
+    
   }
 
   function setAnnotationResultObject(object) {

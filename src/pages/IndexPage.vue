@@ -32,6 +32,7 @@
               filled
               type="textarea"
             />
+            <q-toggle v-model="stemming" label="Stemming" />
             <div>
               <q-btn label="Analyze" type="submit" color="primary" />
               <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
@@ -77,6 +78,8 @@ const localInputText = computed({
 const fileInputRef = ref(null)
 const ocrFileInputRef = ref(null)
 
+const stemming = ref(false)
+
 // Handle file processing
 const handleProcessedFile = (text, source) => {
   store.setInputText(text.replace(/\n\s*\n/g, '\n\n'))
@@ -96,7 +99,7 @@ const onSubmit = async () => {
     return
   }
   // Call the function to calculate results
-  const result = calculateResult(store.inputText, store.labelsMap, store.conceptsMap)
+  const result = calculateResult(store.inputText, store.labelsMap, store.stemmedLabelsMap, store.conceptsMap, stemming.value)
   const tableResultObject = result[1]
   console.log('tableResultObject:', result)
   const annotationResultObject = result[0]
