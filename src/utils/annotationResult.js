@@ -1,71 +1,114 @@
-import { tokenizeSentences, lowerCase, indexArrayOfSubstrings, upperCase } from '../utils/nlp.js';
+import { tokenizeSentences, tokenizeWords, lowerCase, upperCase } from '../utils/nlp.js';
+import {stem } from '../utils/cistem.js';
 
-function calculateResult(text, labelsMap, stemmedLabelsMap, conceptsMap, stemming) {
+function indexArrayOfSubstrings(str, searchValue, label, uris) {
+  let i = 0;
+  const searchValueLenght = searchValue.length
+  //console.log(searchValueLenght)
+  const indices = [];
+  while (true) {
+    const r = str.indexOf(searchValue, i);
+    if (r !== -1) {
+      indices.push([r, r+searchValueLenght, label, uris]);
+      i = r + 1;
+    } else return indices;
+  }
+};
+
+function getWordMatches(words, indexLabel, uriArray, stemmed) {
+  const wordMatches = [];
+  let index = 0;
+  for (let i = 0; i < words.length; i++) {
+    let word = words[i];
+    pointation = 0;
+    // if word last character ends with punctuation, remove it and add 1 to pointation
+    if (word[word.length - 1].match(/[.,!?;:]/)) {
+      word = word.slice(0, -1);
+      pointation = 1;
+    }
+    let comparator = word;
+    if (stemmed) {
+      comparator = stem(word);
+    }
+    if (comparator === indexLabel) {
+      const start = index;
+      const end = index + word.length - pointation;
+      wordMatches.push([start, end, word, uriArray]);
+    }
+    index += word.length + 1 + pointation; // +1 for the space
+  }
+  return wordMatches;
+}
+
+function getMatches(sentence, labelsMap, stemmed) {
+  const matches = []; // Store [start, end, match, uris, ] for all matches in this sentence
+  for (const [label, uriArray] of Object.entries(labelsMap)) {
+    let indexLabel = label;
+    // split sentence into words and join words with spaces
+    let indexSentence = sentence;
+    // lowercase label for matching if not all uppercase
+    if (upperCase(label) != label) {
+      indexLabel = lowerCase(label)
+      indexSentence = lowerCase(sentence);
+    }
+    if (indexLabel.length < 4 || stemmed) {
+      const words = tokenizeWords(indexSentence);
+      const wordMatches = getWordMatches(words, indexLabel, uriArray);
+      // add all wordMatches to matches
+      matches.push(...wordMatches);
+    } else {
+      let indices = indexArrayOfSubstrings(indexSentence, indexLabel, label, uriArray);
+      matches.push(...indices);
+    }
+  return matches;
+  }
+}
+
+function calculateResult(text, labelsMap, stemmedLabelsMap, conceptsMap, stemmed) {
   console.log("Stemming:", stemming);
-  const normdataArray = [];
   const sentences = tokenizeSentences(text);
-  
-  // Create an array of sentence objects with annotations
+  const allMatches = [];
+  const normdataArray = [];
   const annotatedSentences = [];
   
   // Process each sentence
-  for (const sentence of sentences) {
+  for (let sentence of sentences) {
+    sentence = tokenizeWords(sentence).join(' ');
     const sentenceObj = {
-      original: sentence,
-      segments: []
+      string: sentence,
+      concepts: []
     };
+    const matches = getMatches(sentence, labelsMap, false);
+    console.log("matches", matches);
+    sentenceObj.concepts.push(...matches);
+    if (stemmed) {
+      const stemmedMatches = getMatches(sentence, stemmedLabelsMap, true);
+      console.log("stemmedMatches", stemmedMatches);
+      sentenceObj.concepts.push(...stemmedMatches);
+    }
+    annotatedSentences.push(sentenceObj);
     
-    // Keep track of processed segments
-    //let currentIndex = 0;
-    const markers = []; // Store [start, end, label, uris] for all matches in this sentence
-    
-    // Find all labels in the current sentence
-    for (const [label, uriArray] of Object.entries(labelsMap)) {
-      //let labelLength = label.length;
-      let indexLabel = label;
-      let indexSentence = sentence;
-      // lowercase label for matching if not all uppercase
-      if (upperCase(label) != label) {
-        indexLabel = lowerCase(label)
-        indexSentence = lowerCase(sentence);
-      }
-      
-      let indices = indexArrayOfSubstrings(indexSentence, indexLabel);
-      // delete indices for labels with lenght < 4, which don't fill the whole word
-      if (indexLabel.length < 4) {
-        const filteredIndices = [];
-        for (const [start, end] of indices) {
-          // Check if match is a complete word
-          const isWordStart = start === 0 || !/[a-zA-Z]/.test(indexSentence[start - 1]);
-          const isWordEnd = end === indexSentence.length || !/[a-zA-Z]/.test(indexSentence[end + 1]);
-          if (isWordStart && isWordEnd) {
-            filteredIndices.push([start, end]);
-          }
-        }
-        
-        indices = filteredIndices;
-      }
-      // Check if any indices were found
 
-      if (indices.length > 0) {
-        // Add concept information to normdataArray
-        for (const uri of uriArray) {
-          const conceptValues = conceptsMap[uri];
-          const prefLabel = conceptValues.prefLabel;
-          const altLabels = conceptValues.altLabel || [];
-          const definition = conceptValues.definition || '';
-          
-          // Check if the concept is already in the array to avoid duplicates
-          if (!normdataArray.some(item => item.uri === uri)) {
-            const conceptObject = {
-              uri: uri,
-              prefLabel: prefLabel,
-              altLabels: altLabels,
-              definition: definition
-            };
-            normdataArray.push(conceptObject);
-          }
-        }
+
+  // Add concept information to normdataArray
+  // !!!change to use allMatches!!!
+  for (const uri of uriArray) {
+    const conceptValues = conceptsMap[uri];
+    const prefLabel = conceptValues.prefLabel;
+    const altLabels = conceptValues.altLabel || [];
+    const definition = conceptValues.definition || '';
+    
+
+    if (!normdataArray.some(item => item.uri === uri)) {
+      const conceptObject = {
+        uri: uri,
+        prefLabel: prefLabel,
+        altLabels: altLabels,
+        definition: definition
+      };
+      normdataArray.push(conceptObject);
+    }
+  }
         
         // Store all matches with their associated URIs
         for (const [start, end] of indices) {
