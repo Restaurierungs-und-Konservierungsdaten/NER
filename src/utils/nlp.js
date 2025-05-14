@@ -24,4 +24,4 @@ function upperCase(input) {
   return input.toUpperCase();
 }
 
-export { tokenizeSentences, tokenizeWords, getNGrams, lowerCase, indexArrayOfSubstrings, upperCase };
+export { tokenizeSentences, tokenizeWords, getNGrams, lowerCase, upperCase };

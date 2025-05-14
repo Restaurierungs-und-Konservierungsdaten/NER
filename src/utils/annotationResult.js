@@ -4,12 +4,11 @@ import {stem } from '../utils/cistem.js';
 function indexArrayOfSubstrings(str, searchValue, label, uris) {
   let i = 0;
   const searchValueLenght = searchValue.length
-  //console.log(searchValueLenght)
   const indices = [];
   while (true) {
     const r = str.indexOf(searchValue, i);
     if (r !== -1) {
-      indices.push([r, r+searchValueLenght, label, uris]);
+      indices.push([r, r+searchValueLenght - 1, label, uris]);
       i = r + 1;
     } else return indices;
   }
@@ -20,22 +19,24 @@ function getWordMatches(words, indexLabel, uriArray, stemmed) {
   let index = 0;
   for (let i = 0; i < words.length; i++) {
     let word = words[i];
-    pointation = 0;
+    /*
+    let pointation = 0;
     // if word last character ends with punctuation, remove it and add 1 to pointation
     if (word[word.length - 1].match(/[.,!?;:]/)) {
       word = word.slice(0, -1);
       pointation = 1;
     }
+    */
     let comparator = word;
     if (stemmed) {
       comparator = stem(word);
     }
     if (comparator === indexLabel) {
       const start = index;
-      const end = index + word.length - pointation;
+      const end = index + word.length - 1 // - pointation;
       wordMatches.push([start, end, word, uriArray]);
     }
-    index += word.length + 1 + pointation; // +1 for the space
+    index +=  words[i].length; //word.length +1 + pointation; // +1 for the space -1 for index as part of the word
   }
   return wordMatches;
 }
@@ -52,7 +53,7 @@ function getMatches(sentence, labelsMap, stemmed) {
       indexSentence = lowerCase(sentence);
     }
     if (indexLabel.length < 4 || stemmed) {
-      const words = tokenizeWords(indexSentence);
+      const words = tokenizeWords(indexSentence) //.filter((item) => item !== " ");
       const wordMatches = getWordMatches(words, indexLabel, uriArray);
       // add all wordMatches to matches
       matches.push(...wordMatches);
@@ -60,20 +61,18 @@ function getMatches(sentence, labelsMap, stemmed) {
       let indices = indexArrayOfSubstrings(indexSentence, indexLabel, label, uriArray);
       matches.push(...indices);
     }
-  return matches;
   }
+  return matches;
 }
 
 function calculateResult(text, labelsMap, stemmedLabelsMap, conceptsMap, stemmed) {
-  console.log("Stemming:", stemming);
+  console.log("Stemming:", stemmed);
   const sentences = tokenizeSentences(text);
-  const allMatches = [];
   const normdataArray = [];
   const annotatedSentences = [];
-  
-  // Process each sentence
   for (let sentence of sentences) {
-    sentence = tokenizeWords(sentence).join(' ');
+    sentence = tokenizeWords(sentence).join('');
+    console.log("sentence", sentence);
     const sentenceObj = {
       string: sentence,
       concepts: []
@@ -86,9 +85,15 @@ function calculateResult(text, labelsMap, stemmedLabelsMap, conceptsMap, stemmed
       console.log("stemmedMatches", stemmedMatches);
       sentenceObj.concepts.push(...stemmedMatches);
     }
-    annotatedSentences.push(sentenceObj);
+    annotatedSentences.push(sentenceObj.concepts);
+  }
     
-
+  return [
+    annotatedSentences,
+    normdataArray
+  ];
+}
+  /*
 
   // Add concept information to normdataArray
   // !!!change to use allMatches!!!
@@ -170,11 +175,6 @@ function calculateResult(text, labelsMap, stemmedLabelsMap, conceptsMap, stemmed
     
     annotatedSentences.push(sentenceObj);
   }
+  */
   
-  return [
-    annotatedSentences,
-    normdataArray
-  ];
-}
-
 export { calculateResult };
