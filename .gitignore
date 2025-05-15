@@ -33,4 +33,4 @@ yarn-error.log*
 .env.local*
 
 # model files
-/public/model/
+/public/onnx-community/
