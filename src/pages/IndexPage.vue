@@ -1,10 +1,6 @@
 <template>
   <q-page class="flex flex-center column">
     <div class="container">
-      <div class="q-pa-md">
-        <ThesaurusInput
-        />
-      </div>
       <div class="row">
         <div class="q-pa-md col-sm-6 col-12">
           <FileInput
@@ -32,7 +28,6 @@
               filled
               type="textarea"
             />
-            <q-toggle v-model="stemming" label="Stemming" />
             <div>
               <q-btn label="Analyze" type="submit" color="primary" />
               <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
@@ -55,10 +50,11 @@
 import { ref, computed } from 'vue'
 import { useTextStore } from '../stores/TextStore'
 import { useQuasar } from 'quasar'
+import { onMounted } from 'vue'
+import { Gliner } from 'gliner'
 
 import FileInput from '../components/FileInput.vue'
 import OcrFileInput from '../components/OcrFileInput.vue'
-import ThesaurusInput from 'src/components/ThesaurusInput.vue'
 import ResultCard from 'src/components/ResultCard.vue'
 import ResultTable from 'src/components/ResultTable.vue'
 
@@ -75,10 +71,33 @@ const localInputText = computed({
   set: (value) => store.setInputText(value)
 })
 
+onMounted(async () => {
+  const gliner = new Gliner({
+  tokenizerPath:  "public/tokenizer/", //"onnx-community/gliner_multi-v2.1", //"onnx-community/gliner_small-v2",
+  onnxSettings: {
+    modelPath: "public/model_int8.onnx", // Can be a string path or Uint8Array/ArrayBufferLike "public/model.onnx"
+    executionProvider: "webgpu", // Optional: "cpu", "wasm", "webgpu", or "webgl"
+    wasmPaths: "path/to/wasm", // Optional: path to WASM binaries
+    multiThread: true, // Optional: enable multi-threading (for wasm/cpu providers)
+    maxThreads: 4, // Optional: specify number of threads (for wasm/cpu providers)
+    fetchBinary: true, // Optional: prefetch binary from wasmPaths
+  },
+  transformersSettings: {
+    // Optional
+    allowLocalModels: true,
+    useBrowserCache: true,
+  },
+  maxWidth: 12, // Optional
+  modelType: "gliner", // Optional
+  });
+
+  await gliner.initialize();
+
+
+})
+
 const fileInputRef = ref(null)
 const ocrFileInputRef = ref(null)
-
-const stemming = ref(false)
 
 // Handle file processing
 const handleProcessedFile = (text, source) => {
@@ -99,7 +118,7 @@ const onSubmit = async () => {
     return
   }
   // Call the function to calculate results
-  const result = calculateResult(store.inputText, store.labelsMap, store.stemmedLabelsMap, store.conceptsMap, stemming.value)
+  const result = calculateResult(store.gliner, store.inputText)
   const tableResultObject = result[1]
   console.log('tableResultObject:', result)
   const annotationResultObject = result[0]
@@ -107,6 +126,7 @@ const onSubmit = async () => {
   store.setTableResultObject(tableResultObject)
   store.setAnnotationResultObject(annotationResultObject)
 }
+
 // Reset handler
 const onReset = () => {
   // Reset all store data
