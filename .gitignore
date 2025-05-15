@@ -35,3 +35,4 @@ yarn-error.log*
 # model files
 /public/model/
 /src/assets/models
+/public/onnx-community/
