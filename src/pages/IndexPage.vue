@@ -73,27 +73,34 @@ const localInputText = computed({
 
 onMounted(async () => {
   const gliner = new Gliner({
-  tokenizerPath:  "public/tokenizer/", //"onnx-community/gliner_multi-v2.1", //"onnx-community/gliner_small-v2",
+  tokenizerPath:  "onnx-community/gliner_small-v2.1", //"/assets/models/gliner_small-v2.1/", //"onnx-community/gliner_multi-v2.1", //"onnx-community/gliner_small-v2",
   onnxSettings: {
-    modelPath: "public/model_int8.onnx", // Can be a string path or Uint8Array/ArrayBufferLike "public/model.onnx"
-    executionProvider: "webgpu", // Optional: "cpu", "wasm", "webgpu", or "webgl"
-    wasmPaths: "path/to/wasm", // Optional: path to WASM binaries
-    multiThread: true, // Optional: enable multi-threading (for wasm/cpu providers)
-    maxThreads: 4, // Optional: specify number of threads (for wasm/cpu providers)
-    fetchBinary: true, // Optional: prefetch binary from wasmPaths
+    modelPath: "https://huggingface.co/onnx-community/gliner_small-v2.1/resolve/main/onnx/model_uint8.onnx", //"public/model.onnx",//"/assets/models/gliner_small-v2.1/model_int8.onnx", // Can be a string path or Uint8Array/ArrayBufferLike "public/model.onnx"
+    executionProvider: "cpu", //"webgpu", // Optional: "cpu", "wasm", "webgpu", or "webgl"
+    // wasmPaths: "path/to/wasm", // Optional: path to WASM binaries
+    // multiThread: true, // Optional: enable multi-threading (for wasm/cpu providers)
+    // maxThreads: 4, // Optional: specify number of threads (for wasm/cpu providers)
+    // fetchBinary: true, // Optional: prefetch binary from wasmPaths
   },
   transformersSettings: {
     // Optional
-    allowLocalModels: true,
-    useBrowserCache: true,
+    allowLocalModels: false, //true,
+    useBrowserCache: false, //true,
   },
   maxWidth: 12, // Optional
   modelType: "gliner", // Optional
   });
-
+  console.log("Initializing Gliner...");
   await gliner.initialize();
+  console.log("Gliner initialized successfully!");
 
+  const input_text = "Berlin has Hans from germany as a resident.";
+  const texts = [input_text];
+  const entities = ["city", "country", "person"];
+  const threshold = 0.6;
 
+  const decoded = await gliner.inference({ texts, entities, threshold });
+  console.log(decoded);
 })
 
 const fileInputRef = ref(null)
