@@ -1,0 +1,17 @@
+# Eine neue Conda-Umgebung namens 'ner_backend' mit Python 3.9 erstellen
+conda create -n ner_backend python=3.9
+
+# Die neue Umgebung aktivieren
+conda activate ner_backend
+
+# Die benötigten Pakete installieren
+# FastAPI und der Server zum Ausführen
+pip install "fastapi[all]"
+# GLiNER und PyTorch (das Herzstück der NER)
+pip install gliner
+pip install torch
+# Datenbank-Anbindung
+pip install SQLAlchemy
+# Passwort-Hashing und JWT-Tokens für die Authentifizierung
+pip install "passlib[bcrypt]"
+pip install "python-jose[cryptography]"
