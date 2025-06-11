@@ -16,7 +16,6 @@ class AnnotationForSaving(BaseModel):
     model_annotations: Any # Kann ein JSON-Objekt sein
     curated_annotations: Optional[Any] = None # Optional
 
-# NEU: Modell für die Rückgabe von Annotationen aus der DB
 class AnnotationInDB(BaseModel):
     id: int
     original_text: str

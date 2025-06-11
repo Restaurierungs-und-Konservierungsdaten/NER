@@ -5,11 +5,10 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from typing import Optional
-
 from . import database, models
 
 # --- Konfiguration ---
-SECRET_KEY = "IHRE_SEHR_GEHEIME_ZEICHENKETTE" # Unbedingt ändern!
+SECRET_KEY = "IHRE_SEHR_GEHEIME_ZEICHENKETTE"  # Unbedingt ändern!
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -46,13 +45,14 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db = Depends(dat
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        username: Optional[str] = payload.get("sub")  # Fix 1: Allow None type
+        if username is None:  # Fix 2: Check for None before using
             raise credentials_exception
         token_data = models.TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(db, username=token_data.username)
+    
+    user = get_user(db, username)  # Use the verified username directly
     if user is None:
         raise credentials_exception
     return user
